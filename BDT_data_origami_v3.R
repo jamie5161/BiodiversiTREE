@@ -12,7 +12,7 @@
 rm(list=ls(all=TRUE))
 
 #add appropriate libarary
-library(rodm2)
+library(rodm2) #devtools::install_github("khondula/rodm2", force =T) 
 library(DBI)
 library(data.table)
 library(tidyverse)
@@ -20,97 +20,97 @@ library(lubridate)
 library(parallel)
 
 #Define working directory
-working_dir<-"/nfs/njones-data/Research Projects/BiodiversiTREE/data/BDT_Sensor_Data/"
-# db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
-# db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
+working_dir<-"C:/Users/pullenj/Dropbox (Smithsonian)/BDT_Sensor_Data/"
+#db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
+#db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
 
 ##################################################################################
 #Step 2:  Setup Database  (Only run this once!) ----------------------------------
 ##################################################################################
-# #Create SQLight databse~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-# db <- create_sqlite(dir = working_dir, 
-#                     filename="BiodiversiTREE",
-#                     connect = F)
-# db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
-# 
-# #Connect to database
-# db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
-# 
-# #Create list of sensors in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #Create list of sensors
-# sensors<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
-#   select(plot, subplot, Sensor) %>%
-#   distinct(.)
-# 
-# #Create function to describe equipment in db
-# fun<-function(n){
-#   #describe equipment
-#   db_describe_equipment(db, 
-#                         equip_name    =   paste0(sensors$plot[n], sensors$subplot[n], "_",sensors$Sensor[n]), 
-#                         serial_no     =   123456789,
-#                         model_name    =   "model1",
-#                         vendor        =   "vendor name", 
-#                         owner_first   =   "owner_first", 
-#                         owner_last    =   "owner_last",
-#                         owner_email   =   "owner_email",
-#                         equipment_type=   "Sensor",
-#                         manufacturer  =   "Sentek")}
-# 
-# #Run function
-# lapply(seq(1,length(sensors[,1])), fun)
-# 
-# #Clean up workspace
-# remove(fun, sensors)
-# 
-# #Create list of sites in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #Create list of plots
-# sites<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
-#   select(plot, subplot) %>%
-#   distinct(.)
-# 
-# #Create function to describe sites the database
-# fun<-function(n){
-#   #describe site
-#   db_describe_site(db, site_code = paste0(sites$plot[n], sites$subplot[n]))
-# }
-# 
-# #run function 
-# lapply(seq(1, length(sites[,1])), fun)
-# 
-# 
-# #Desicribe Method~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# db_describe_method(db, 
-#                    methodname =   "BDT Data Download",
-#                    methodcode =   "BDT Data Download",
-#                    methodtypecv = "Instrument deployment")  
-# 
-# #Describe Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #Create vector of sensor depths and measurement codes
-# depth<-c(2,12,22,32,42,52,62,75,82)
-# 
-# #Create function to describe variable
-# fun<-function(n){
-#   db_describe_variable(db, 
-#                        variabletypecv = "Hydrology",
-#                        variablecode   = paste0("VWC_",depth[n]),
-#                        variablenamecv = "volumetricWaterContent")
-#   #Othe Variables to add later
-#   # db_describe_variable(db, 
-#   #                      variabletypecv = "Hydrology",
-#   #                      variablecode   = paste0("sal_",depth[n]),
-#   #                      variablenamecv = "salinity")
-#   # db_describe_variable(db, 
-#   #                      variabletypecv = "Hydrology",
-#   #                      variablecode   = paste0("temp_",depth[n]),
-#   #                      variablenamecv = "temperatureSensor")
-# }
-# 
-# #Run function
-# lapply(seq(1, length(depth)), fun)
-# 
-# 
-# #Disconnect from database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# RSQLite::dbDisconnect(db)
+#Create SQLight databse~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+db <- create_sqlite(dir = working_dir,
+                    filename="BiodiversiTREE",
+                    connect = F)
+db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
+
+#Connect to database
+db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
+
+#Create list of sensors in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Create list of sensors
+sensors<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
+  select(plot, subplot, Sensor) %>%
+  distinct(.)
+
+#Create function to describe equipment in db
+fun<-function(n){
+  #describe equipment
+  db_describe_equipment(db,
+                        equip_name    =   paste0(sensors$plot[n], sensors$subplot[n], "_",sensors$Sensor[n]),
+                        serial_no     =   123456789,
+                        model_name    =   "model1",
+                        vendor        =   "vendor name",
+                        owner_first   =   "owner_first",
+                        owner_last    =   "owner_last",
+                        owner_email   =   "owner_email",
+                        equipment_type=   "Sensor",
+                        manufacturer  =   "Sentek")}
+
+#Run function
+lapply(seq(1,length(sensors[,1])), fun)
+
+#Clean up workspace
+remove(fun, sensors)
+
+#Create list of sites in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Create list of plots
+sites<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
+  select(plot, subplot) %>%
+  distinct(.)
+
+#Create function to describe sites the database
+fun<-function(n){
+  #describe site
+  db_describe_site(db, site_code = paste0(sites$plot[n], sites$subplot[n]))
+}
+
+#run function
+lapply(seq(1, length(sites[,1])), fun)
+
+
+#Desicribe Method~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+db_describe_method(db,
+                   methodname =   "BDT Data Download",
+                   methodcode =   "BDT Data Download",
+                   methodtypecv = "Instrument deployment")
+
+#Describe Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Create vector of sensor depths and measurement codes
+depth<-c(2,12,22,32,42,52,62,75,82)
+
+#Create function to describe variable
+fun<-function(n){
+  db_describe_variable(db,
+                       variabletypecv = "Hydrology",
+                       variablecode   = paste0("VWC_",depth[n]),
+                       variablenamecv = "volumetricWaterContent")
+  #Othe Variables to add later
+  # db_describe_variable(db,
+  #                      variabletypecv = "Hydrology",
+  #                      variablecode   = paste0("sal_",depth[n]),
+  #                      variablenamecv = "salinity")
+  # db_describe_variable(db,
+  #                      variabletypecv = "Hydrology",
+  #                      variablecode   = paste0("temp_",depth[n]),
+  #                      variablenamecv = "temperatureSensor")
+}
+
+#Run function
+lapply(seq(1, length(depth)), fun)
+
+
+#Disconnect from database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RSQLite::dbDisconnect(db)
 
 ##################################################################################
 #Step 3:  Create function to insert data into database----------------------------
@@ -228,9 +228,27 @@ reader.fun<-function(n){
   df
 }
 
+
 #Run function (note: mclappply does not work on windows machines.  Use parlapply.)
+
+numCores <- detectCores()
+
+cl <- makeCluster(numCores)
+
+clusterEvalQ(cl, {
+  library(rodm2) #devtools::install_github("khondula/rodm2", force =T) 
+  library(DBI)
+  library(data.table)
+  library(tidyverse)
+  library(lubridate)
+})
+x<-parLapply(cl, seq(1,length(files)),reader.fun)
+
+output<-bind_rows(x) %>% 
+  arrange(Timestamp, site)
+
 t0<-Sys.time()
-x<-mclapply(seq(1,length(files)),reader.fun, mc.cores=16)
+x<-parallel::parLapply(cl, seq(1,length(files)), reader.fun)
 output<-bind_rows(x) %>% 
   arrange(Timestamp, site)
 tf<-Sys.time()
