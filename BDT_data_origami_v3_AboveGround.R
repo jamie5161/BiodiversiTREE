@@ -24,93 +24,93 @@ working_dir<-"C:/Users/pullenj/Dropbox (Smithsonian)/BDT_Sensor_Data/"
 #db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
 #db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
 
-# ##################################################################################
-# #Step 2:  Setup Database  (Only run this once!) ----------------------------------
-# ##################################################################################
-# #Create SQLight databse~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# db <- create_sqlite(dir = working_dir,
-#                     filename="BiodiversiTREE",
-#                     connect = F)
-# db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
-# 
-# #Connect to database
-# db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
-# 
-# #Create list of sensors in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #Create list of sensors
-# sensors<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
-#   select(plot, subplot, Sensor) %>%
-#   distinct(.)
-# 
-# #Create function to describe equipment in db
-# fun<-function(n){
-#   #describe equipment
-#   db_describe_equipment(db,
-#                         equip_name    =   paste0(sensors$plot[n], sensors$subplot[n], "_",sensors$Sensor[n]),
-#                         serial_no     =   123456789,
-#                         model_name    =   "model1",
-#                         vendor        =   "vendor name",
-#                         owner_first   =   "owner_first",
-#                         owner_last    =   "owner_last",
-#                         owner_email   =   "owner_email",
-#                         equipment_type=   "Sensor",
-#                         manufacturer  =   "Sentek")}
-# 
-# #Run function
-# lapply(seq(1,length(sensors[,1])), fun)
-# 
-# #Clean up workspace
-# remove(fun, sensors)
-# 
-# #Create list of sites in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #Create list of plots
-# sites<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
-#   select(plot, subplot) %>%
-#   distinct(.)
-# 
-# #Create function to describe sites the database
-# fun<-function(n){
-#   #describe site
-#   db_describe_site(db, site_code = paste0(sites$plot[n], sites$subplot[n]))
-# }
-# 
-# #run function
-# lapply(seq(1, length(sites[,1])), fun)
-# 
-# 
-# #Desicribe Method~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# db_describe_method(db,
-#                    methodname =   "BDT Data Download",
-#                    methodcode =   "BDT Data Download",
-#                    methodtypecv = "Instrument deployment")
-# 
-# #Describe Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# #Create vector of sensor depths and measurement codes
-# depth<-c(2,12,22,32,42,52,62,75,82)
-# 
-# #Create function to describe variable
-# fun<-function(n){
-#   db_describe_variable(db,
-#                        variabletypecv = "Hydrology",
-#                        variablecode   = paste0("VWC_",depth[n]),
-#                        variablenamecv = "volumetricWaterContent")
-#   #Othe Variables to add later
-#   # db_describe_variable(db,
-#   #                      variabletypecv = "Hydrology",
-#   #                      variablecode   = paste0("sal_",depth[n]),
-#   #                      variablenamecv = "salinity")
-#   # db_describe_variable(db,
-#   #                      variabletypecv = "Hydrology",
-#   #                      variablecode   = paste0("temp_",depth[n]),
-#   #                      variablenamecv = "temperatureSensor")
-# }
-# 
-# #Run function
-# lapply(seq(1, length(depth)), fun)
-# 
-# 
-# #Disconnect from database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# RSQLite::dbDisconnect(db)
+##################################################################################
+#Step 2:  Setup Database  (Only run this once!) ----------------------------------
+##################################################################################
+#Create SQLight databse~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+db <- create_sqlite(dir = working_dir,
+                    filename="BiodiversiTREE",
+                    connect = F)
+db_loc <- file.path(working_dir, "BiodiversiTREE.sqlite")
+
+#Connect to database
+db<-DBI::dbConnect(RSQLite::SQLite(), paste0(db_loc))
+
+#Create list of sensors in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Create list of sensors
+sensors<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
+  select(plot, subplot, Sensor) %>%
+  distinct(.)
+
+#Create function to describe equipment in db
+fun<-function(n){
+  #describe equipment
+  db_describe_equipment(db,
+                        equip_name    =   paste0(sensors$plot[n], sensors$subplot[n], "_",sensors$Sensor[n]),
+                        serial_no     =   123456789,
+                        model_name    =   "model1",
+                        vendor        =   "vendor name",
+                        owner_first   =   "owner_first",
+                        owner_last    =   "owner_last",
+                        owner_email   =   "owner_email",
+                        equipment_type=   "Sensor",
+                        manufacturer  =   "Sentek")}
+
+#Run function
+lapply(seq(1,length(sensors[,1])), fun)
+
+#Clean up workspace
+remove(fun, sensors)
+
+#Create list of sites in the database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Create list of plots
+sites<-read.csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
+  select(plot, subplot) %>%
+  distinct(.)
+
+#Create function to describe sites the database
+fun<-function(n){
+  #describe site
+  db_describe_site(db, site_code = paste0(sites$plot[n], sites$subplot[n]))
+}
+
+#run function
+lapply(seq(1, length(sites[,1])), fun)
+
+
+#Desicribe Method~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+db_describe_method(db,
+                   methodname =   "BDT Data Download",
+                   methodcode =   "BDT Data Download",
+                   methodtypecv = "Instrument deployment")
+
+#Describe Variables~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Create vector of sensor depths and measurement codes
+depth<-c(2,12,22,32,42,52,62,75,82)
+
+#Create function to describe variable
+fun<-function(n){
+  db_describe_variable(db,
+                       variabletypecv = "Hydrology",
+                       variablecode   = paste0("VWC_",depth[n]),
+                       variablenamecv = "volumetricWaterContent")
+  #Othe Variables to add later
+  # db_describe_variable(db,
+  #                      variabletypecv = "Hydrology",
+  #                      variablecode   = paste0("sal_",depth[n]),
+  #                      variablenamecv = "salinity")
+  # db_describe_variable(db,
+  #                      variabletypecv = "Hydrology",
+  #                      variablecode   = paste0("temp_",depth[n]),
+  #                      variablenamecv = "temperatureSensor")
+}
+
+#Run function
+lapply(seq(1, length(depth)), fun)
+
+
+#Disconnect from database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+RSQLite::dbDisconnect(db)
 
 ##################################################################################
 #Step 3:  Create function to insert data into database----------------------------
@@ -141,8 +141,8 @@ reader.fun<-function(n){
   #Remove mislabled timestamps (will need to deal with this later...)
   df<-df %>%
     mutate(TIMESTAMP = as.POSIXct(df$TIMESTAMP)) %>%
-    filter(TIMESTAMP > threshold_date)%>%  #Some values printed from year 2000?
-    distinct(TIMESTAMP, .keep_all = TRUE)    #Some values taken 2x. 
+    filter(TIMESTAMP > threshold_date) %>%   #Some values printed from year 2000?
+    distinct(TIMESTAMP, .keep_all = TRUE)    #Some values taken 2x
   
   #Data wrangling~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #Find width for gather function
@@ -155,7 +155,7 @@ reader.fun<-function(n){
     #Select relevant collumns
     select(TIMESTAMP, STATNAME, Loggernet_name, val) %>%   
     #For now, lets filter for volumetric soil water content
-    filter(str_detect(Loggernet_name, c("TEMP"))) %>%
+    filter(str_detect(Loggernet_name, c("CS215"))) %>%
     #Deal with Loggernet_name inconsistancies [e.g., missing "_Avg" in some files starting fall 2018]
     mutate(Loggernet_name = if_else(str_detect(Loggernet_name, c("_Avg"))==F, 
                                     #If no "_Avg", splice into string
@@ -177,9 +177,9 @@ reader.fun<-function(n){
   #Add plot data to df
   key<-read_csv(paste0(working_dir,"Experimental Design Table/sensors.csv")) %>%
     #Filter for only VWC
-    filter(Research_variable=="TEMP") %>%
+    filter(Research_variable=="AirTemp"|Research_variable=="RawRH"|Research_variable=="CleanRH"|Research_variable=="VP"|Research_variable=="SVP"|Research_variable=="VPD") %>%
     #Select varibles of interest
-    select(logger, plot, Loggernet_name, height, Research_variable) %>%
+    select(logger, plot, Loggernet_name, Research_variable) %>%
     #define variable address
     mutate(variable.address=substr(Loggernet_name,
                                    str_locate(Loggernet_name, "_")[,1]+1,
@@ -192,16 +192,16 @@ reader.fun<-function(n){
   #Add subplot data to df
   key<-read_csv(paste0(working_dir,"Experimental Design Table/plot.csv")) %>%
     #Select soil mositure sensors [b/c that's what we care about right now]
-    filter(Sensor=='Sentek') %>%
+    filter(Sensor=='CS215') %>%
     #tidy variable address
     rename(variable.address='variable address') %>%
     #select variables of interest
-    select(logger, plot, subplot, variable.address)
+    select(logger, plot, variable.address)
   #Correct key
-  key$variable.address[key$plot==4 & key$subplot=="a"]<-"d1"
-  key$variable.address[key$plot==4 & key$subplot=="b"]<-"d2"
-  key$variable.address[key$plot==16 & key$subplot=="a"]<-"g1"
-  key$variable.address[key$plot==16 & key$subplot=="b"]<-"g2"
+  # key$variable.address[key$plot==4 & key$subplot=="a"]<-"d1"
+  # key$variable.address[key$plot==4 & key$subplot=="b"]<-"d2"
+  # key$variable.address[key$plot==16 & key$subplot=="a"]<-"g1"
+  # key$variable.address[key$plot==16 & key$subplot=="b"]<-"g2"
   
   #Join
   df<-left_join(df, key, by=c('STATNAME'          = 'logger' ,
@@ -211,16 +211,16 @@ reader.fun<-function(n){
   #Organize for input into database
   df<-df %>% 
     #Create var collumn
-    mutate(var=paste0(Research_variable,"_", height*-1)) %>%  
+    #mutate(var=paste0(Research_variable,"1")) %>%  
     #Select collumns of interest
-    select(TIMESTAMP, plot, subplot, val, var) %>%
+    select(TIMESTAMP, plot, val, Research_variable) %>%
     #spread data for input
-    spread(., var, val) %>%
+    #spread(., var, val) %>%
     #turn timestamp into posix
-    mutate(Timestamp = as.POSIXct(TIMESTAMP), 
-           site=paste0(plot,subplot)) %>%
-    #select final collumns 
-    select(Timestamp, site, plot, TEMP_2, TEMP_12, TEMP_22, TEMP_32, TEMP_42, TEMP_52, TEMP_62, TEMP_72, TEMP_82) %>%
+    mutate(Timestamp = as.POSIXct(TIMESTAMP))%>% 
+           #site=paste0(plot,subplot)) %>%
+    #select final collumns
+    select(Timestamp, plot, Research_variable, val) %>%
     mutate(download= file)
   
   #Export
@@ -233,14 +233,14 @@ reader.fun<-function(n){
 t0<-Sys.time()
 x<-lapply(seq(1,length(files)), reader.fun)
 output<-bind_rows(x) %>% 
-  select(-download)%>%
-  arrange(Timestamp, site)
+  arrange(Timestamp, plot)%>%
+  filter(Research_variable=="AirTemp"|Research_variable=="CleanRH"|Research_variable=="VPD")
 tf<-Sys.time()
 tf-t0
 
 
 #Write output
-write.csv(output, paste0(working_dir, "temp_belowground_2018.csv"))
+write.csv(output, paste0(working_dir, "output_aboveground.csv"))
 
 
 #Insert into database~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
